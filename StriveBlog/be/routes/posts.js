@@ -65,7 +65,7 @@ post.get('/blogPosts/:id', async (req, res) => {
   
 })
 
-post.post('/blogPosts/create', async (req, res) => {
+post.post('/blogPosts', async (req, res) => {
     const newPost = new postsModel({
         category: req.body.category,
         title: req.body.title,
@@ -99,4 +99,57 @@ post.post('/blogPosts/create', async (req, res) => {
 
 })
 
+post.put('/blogPosts/:id', async (req, res) => {
+    const {id} = req.params
+
+    try {
+        const postToUpdate = await postsModel.findById(id)
+        if(!postToUpdate) {
+            res.status(404).send({
+                statusCode: 404,
+                message: 'User not found'
+            })
+        }
+
+        const dataToUpdate = req.body;
+        const options= { new: true };
+        const result = await postsModel.findByIdAndUpdate(id, dataToUpdate, options)
+
+        res.status(200).send({
+            statusCode: 200,
+            message: 'Post updated successfully',
+            result
+        })
+
+    } catch (e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        })
+    }
+})
+post.delete('/blogPosts/:id', async (req, res) => {
+    const {id} = req.params
+
+    try {
+        const postToDelete = await postsModel.findByIdAndDelete(id)
+        if(!postToDelete) {
+            res.status(404).send({
+                statusCode: 404,
+                message: 'User not found'
+            })
+        }
+
+        res.status(200).send({
+            statusCode: 200,
+            message: 'Post deleted successfully'
+        })
+
+    } catch(e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        })
+    }
+})
 module.exports = post

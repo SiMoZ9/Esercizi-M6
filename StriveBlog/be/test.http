@@ -30,7 +30,7 @@ DELETE http://localhost:5050/authors/delete/651d932c2558c3724b6fda8a
 GET http://localhost:5050/blogPosts
 
 ###
-POST http://localhost:5050/blogPosts/create
+POST http://localhost:5050/blogPosts/
 Content-Type: application/json
 
 {
@@ -47,3 +47,18 @@ Content-Type: application/json
   },
   "content": "Prova di post yeah"
 }
+
+###
+GET http://localhost:5050/blogPosts/65210809c47ed5f4156809d5
+
+###
+PUT http://localhost:5050/blogPosts/65210809c47ed5f4156809d5
+Content-Type: application/json
+
+{
+  "category": "Daje a treno",
+  "content": "Maremma hane"
+}
+
+###
+DELETE http://localhost:5050/blogPosts/65210809c47ed5f4156809d5
