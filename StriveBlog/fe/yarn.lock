@@ -7967,6 +7967,13 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
+react-responsive-pagination@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/react-responsive-pagination/-/react-responsive-pagination-2.2.3.tgz#1945010c67ccdaefa41118f911fb4dd8237314a8"
+  integrity sha512-Rn9ts0AZzM0X+pcmVcSMNJAPD/ChO+1Yowssl56TidZcPHXdeg40FKdO7cw6MR1umaLFT/er/2GQTG6EUpw1VQ==
+  dependencies:
+    prop-types "^15.8.1"
+
 react-router-dom@^6.16.0:
   version "6.16.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.16.0.tgz#86f24658da35eb66727e75ecbb1a029e33ee39d9"

@@ -21,25 +21,25 @@ authors.get('/authors', async (req, res) => {
     }
 })
 
-// authors.get('/authors/byId/:id', async (req, res) => {
-//     const { id } = req.params
-//     console.log(req.params)
-//     try {
-//         const author = await authorModel.findById(id)
-//
-//         if (!author) {
-//             res.status(404).send({
-//                 statusCode: 404,
-//                 message: "Not Found",
-//             })
-//         }
-//
-//         res.status(200).send({ statusCode: 200, message: `Author found`, author })
-//
-//     } catch (err) {
-//         res.status(200).send({ statusCode: 200, message: 'Internal server error', err})
-//     }
-// })
+authors.get('/authors/byId/:id', async (req, res) => {
+    const { id } = req.params
+    console.log(req.params)
+    try {
+        const author = await authorModel.findById(id)
+
+        if (!author) {
+            res.status(404).send({
+                statusCode: 404,
+                message: "Not Found",
+            })
+        }
+
+        res.status(200).send({ statusCode: 200, message: `Author found`, author })
+
+    } catch (err) {
+        res.status(200).send({ statusCode: 200, message: 'Internal server error', err})
+    }
+})
 
 authors.get('/authors/:id/blogPosts', async (req, res) => {
     const { id } = req.params;

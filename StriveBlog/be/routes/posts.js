@@ -1,10 +1,20 @@
 const express = require('express')
 const postsModel = require('../models/postModel')
+const mongoose = require("mongoose");
 const post = express.Router()
 
 // all posts
 post.get('/blogPosts', async (req, res) => {
-    const posts = await postsModel.find()
+
+
+    const {
+        page = 1,
+        pageSize = 5
+    } = req.query
+
+    const posts = await postsModel.find().limit(pageSize).skip((page - 1) * pageSize).populate('author')
+    const totalPosts = await postsModel.count()
+
     try {
 
         if(!posts) {
@@ -19,6 +29,9 @@ post.get('/blogPosts', async (req, res) => {
         res.status(200).send(
             {
                 statusCode: 200,
+                currentPage: Number(page),
+                totalPages: Math.ceil(totalPosts / pageSize),
+                totalPosts,
                 posts
             }
         )
@@ -34,7 +47,7 @@ post.get('/blogPosts', async (req, res) => {
 
 post.get('/blogPosts/:id', async (req, res) => {
   const {id} = req.params
-  const posts = await postsModel.findById(id)
+  const posts = await postsModel.findById(id).populate('author')
   try {
     if (!posts) {
        res.status(404).send(
@@ -109,10 +122,7 @@ post.post('/blogPosts', async (req, res) => {
             value: req.body.readTime.value,
             unit: req.body.readTime.unit
         },
-        author: {
-            name: req.body.author.name,
-            avatar: req.body.author.avatar
-        },
+        author: req.body.author,
         content: req.body.content
     })
 
@@ -187,4 +197,23 @@ post.delete('/blogPosts/:id', async (req, res) => {
         })
     }
 })
+
+post.delete('/blogPosts/', async (req, res) => {
+    try {
+        const deleteAll = await postsModel.deleteMany()
+        if (deleteAll) {
+            console.log("Deleted")
+            res.status(200).send({
+                statusCode: 200,
+                message: "Deleted successfully"
+            })
+        }
+    } catch (e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        })
+    }
+})
+
 module.exports = post
