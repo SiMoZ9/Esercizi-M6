@@ -1,5 +1,6 @@
 const express = require('express')
 const authorModel = require('../models/authorModel')
+const postsModel = require("../models/postModel");
 
 const authors = express.Router()
 
@@ -20,25 +21,52 @@ authors.get('/authors', async (req, res) => {
     }
 })
 
-authors.get('/authors/byId/:id', async (req, res) => {
-    const { id } = req.params
-    console.log(req.params)
+// authors.get('/authors/byId/:id', async (req, res) => {
+//     const { id } = req.params
+//     console.log(req.params)
+//     try {
+//         const author = await authorModel.findById(id)
+//
+//         if (!author) {
+//             res.status(404).send({
+//                 statusCode: 404,
+//                 message: "Not Found",
+//             })
+//         }
+//
+//         res.status(200).send({ statusCode: 200, message: `Author found`, author })
+//
+//     } catch (err) {
+//         res.status(200).send({ statusCode: 200, message: 'Internal server error', err})
+//     }
+// })
+
+authors.get('/authors/:id/blogPosts', async (req, res) => {
+    const { id } = req.params;
+    console.log(id)
     try {
+        const postByUserId = await postsModel.find({
+            content: {
+                $regex: id,
+                $options: 'i'
+            }
+        })
+
         const author = await authorModel.findById(id)
 
         if (!author) {
-            res.status(404).send({
-                statusCode: 404,
-                message: "Not Found",
-            })
+            res.status(404).send({ statusCode: 404, message: "User Not Found"})
         }
 
-        res.status(200).send({ statusCode: 200, message: `Author found`, author })
-
-    } catch (err) {
-        res.status(200).send({ statusCode: 200, message: 'Internal server error', err})
+        res.status(200).send({ statusCode: 200, message: `All posts `, postByUserId })
+    } catch (e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Errore interno del server"
+        })
     }
 })
+
 
 authors.post('/authors/create', async (req, res) => {
     const newAuthor = new authorModel({

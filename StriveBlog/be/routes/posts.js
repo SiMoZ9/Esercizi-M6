@@ -58,11 +58,46 @@ post.get('/blogPosts/:id', async (req, res) => {
          res.status(500).send(
                 {
                     statusCode: 500,
-                    message: "Posts not found"
+                    message: "Internal server error"
                 }
             )
     }
   
+})
+
+post.get('/blogPosts/byTitle', async (req, res) => {
+    const {title} = req.query
+    console.log(title)
+    try {
+        // const postByTitle = await postsModel.find({
+        //     title: {
+        //         $regex: title,
+        //         $options: 'i'
+        //     }
+        // })
+        //
+        // if (!postByTitle) {
+        //     res.status(404)
+        //         .send({
+        //             statusCode: 404,
+        //             message: "Post not found"
+        //         })
+        // }
+        //
+        // res.status(200)
+        //     .send({
+        //         statusCode: 200,
+        //         message: "Post found",
+        //         postByTitle
+        //     })
+
+    } catch (e) {
+        res.status(500)
+            .send({
+                statusCode: 500,
+                message: "Internal server error"
+            })
+    }
 })
 
 post.post('/blogPosts', async (req, res) => {

@@ -8,8 +8,9 @@ require('dotenv').config()
 const PORT = 5050;
 const server = express();
 
-server.use(cors())
 server.use(express.json())
+
+server.use(cors())
 server.use('/', authorsRoute)
 server.use('/', postsRoute)
 

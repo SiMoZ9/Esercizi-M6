@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
 import { Col, Row } from "react-bootstrap";
 import BlogItem from "../blog-item/BlogItem";
+import {BeatLoader} from "react-spinners";
 
 const BlogList = props => {
   const [posts, setPosts] = useState([])
   const [loading, setIsLoading] = useState(false)
-
+  const [error, setError] = useState(null)
 
   const fetchPosts = async () => {
     setIsLoading(true)
@@ -16,19 +17,27 @@ const BlogList = props => {
       setIsLoading(false)
 
     } catch (e) {
-      console.log(e)
+      setError(e)
     }
   }
 
   useEffect(() => {
     fetchPosts()
   }, [])
-  console.log(posts)
+  console.log(posts.posts)
   console.log(loading)
 
   return (
     <Row>
-      {!loading && posts && posts.map((post, i) => (
+      {error && <h1>Errore nel caricamento</h1>}
+      {loading && !error && (
+          <BeatLoader
+              loading={loading}
+              size={150}
+              aria-label='Loading Spinner'
+          />
+      )}
+      {!loading && posts.posts && posts.posts.map((post, i) => (
         <Col
           key={`item-${i}`}
           md={4}
