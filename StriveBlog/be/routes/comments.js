@@ -9,8 +9,6 @@ comment.get('/blogPosts/:id/comments', async (req, res) => {
     try {
         const findPost = await postModel.findById(id).populate("comments")
         
-
-
         if (!findPost) {
             res.status(404).send({
                 statusCode: 404,
@@ -25,13 +23,38 @@ comment.get('/blogPosts/:id/comments', async (req, res) => {
             })
         }
 
-
     } catch (err) {
         res.status(500).send({
             statusCode: 500,
             message: "Internal server error"
         })
         console.log(err)
+    }
+})
+
+// get single comment
+
+comment.get('/blogPosts/:id/comments/:commentId', async (req, res) => {
+    const {id, commentId} = req.params
+    
+    try {
+      
+      const post = await postModel.findById(id)
+      const comments = await commentsModel.findById(commentId)
+      
+      if (!(post || comments)) {
+        res.status(404).send({statusCode: 404, message: "Post or comment not found"})
+      } else {
+          res.status(200).send({statusCode: 200, comments})
+      }
+
+    } catch (error) {
+        res.status(500).send({
+          statusCode: 500,
+          message: "Internal server error"
+        })
+        
+        console.log(error)
     }
 })
 
@@ -72,6 +95,63 @@ comment.post('/blogPosts/:id/', async (req, res) => {
         })
         console.log(err)
     }
+})
+
+comment.put('/blogPosts/:id/comments/:commentId', async (req, res) => {
+    const {id, commentId} = req.params
+    
+    try {
+      
+      const post = await postModel.findById(id)
+      const comments = await commentsModel.findById(commentId)
+      
+      if (!(post || comments)) {
+        res.status(404).send({statusCode: 404, message: "Post or comment not found"})
+      } else {
+        const dataToUpdate = req.body;
+        const options= { new: true };
+        const result = await commentsModel.findByIdAndUpdate(commentId, dataToUpdate, options)
+
+        res.status(200).send({
+            statusCode: 200,
+            message: 'Comment updated successfully',
+            result
+        })
+
+        }
+    } catch (e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        })
+        
+        console.log(e)
+    }
+
+})
+
+comment.delete('/blogPosts/:id/comments/:commentId', async (req, res) => {
+   const {id, commentId} = req.params
+    
+    try {
+      
+      const post = await postModel.findById(id)
+      const comments = await commentsModel.findByIdAndDelete(commentId)
+      
+      if (!(post || comments)) {
+        res.status(404).send({statusCode: 404, message: "Post or comment not found"})
+      } else {
+          res.status(200).send({statusCode: 200, message: "Post deleted successfully"})
+      }
+
+  } catch (error) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        })
+      
+        console.log(e)
+  }
 })
 
 module.exports = comment
