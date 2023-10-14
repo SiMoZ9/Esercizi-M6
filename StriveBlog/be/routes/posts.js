@@ -1,18 +1,18 @@
 const express = require('express')
 const postsModel = require('../models/postModel')
 const mongoose = require("mongoose");
+const commentsModel = require("../models/commentsModel");
 const post = express.Router()
 
 // all posts
 post.get('/blogPosts', async (req, res) => {
-
 
     const {
         page = 1,
         pageSize = 5
     } = req.query
 
-    const posts = await postsModel.find().limit(pageSize).skip((page - 1) * pageSize).populate('author')
+    const posts = await postsModel.find().limit(pageSize).skip((page - 1) * pageSize).populate('author').populate('comments')
     const totalPosts = await postsModel.count()
 
     try {
@@ -78,41 +78,6 @@ post.get('/blogPosts/:id', async (req, res) => {
   
 })
 
-post.get('/blogPosts/byTitle', async (req, res) => {
-    const {title} = req.query
-    console.log(title)
-    try {
-        // const postByTitle = await postsModel.find({
-        //     title: {
-        //         $regex: title,
-        //         $options: 'i'
-        //     }
-        // })
-        //
-        // if (!postByTitle) {
-        //     res.status(404)
-        //         .send({
-        //             statusCode: 404,
-        //             message: "Post not found"
-        //         })
-        // }
-        //
-        // res.status(200)
-        //     .send({
-        //         statusCode: 200,
-        //         message: "Post found",
-        //         postByTitle
-        //     })
-
-    } catch (e) {
-        res.status(500)
-            .send({
-                statusCode: 500,
-                message: "Internal server error"
-            })
-    }
-})
-
 post.post('/blogPosts', async (req, res) => {
     const newPost = new postsModel({
         category: req.body.category,
@@ -123,7 +88,8 @@ post.post('/blogPosts', async (req, res) => {
             unit: req.body.readTime.unit
         },
         author: req.body.author,
-        content: req.body.content
+        content: req.body.content,
+        comments: req.body.comments
     })
 
     try {
@@ -215,5 +181,9 @@ post.delete('/blogPosts/', async (req, res) => {
         })
     }
 })
+
+
+// COMMENTS SECTION
+
 
 module.exports = post

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authorsRoute = require('./routes/authors');
 const postsRoute = require('./routes/posts')
+const commentsRoute = require('./routes/comments')
 const cors = require('cors')
 
 require('dotenv').config()
@@ -13,6 +14,7 @@ server.use(express.json())
 server.use(cors())
 server.use('/', authorsRoute)
 server.use('/', postsRoute)
+server.use('/', commentsRoute)
 
 mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,

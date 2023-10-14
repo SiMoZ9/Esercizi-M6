@@ -20,13 +20,21 @@ const PostSchema = new mongoose.Schema({
             type: String,
         },
     },
+
     author: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'authorModel'
     },
+
     content: {
         type: String,
-    }
-}, {timestamps: true, strict: true})
+    },
 
-module.exports = mongoose.model('postModel', PostSchema, 'posts')
+    comments: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'commentsModel'
+      }]
+
+  }, {timestamps: true, strict: true})
+
+  module.exports = mongoose.model('postModel', PostSchema, 'posts')

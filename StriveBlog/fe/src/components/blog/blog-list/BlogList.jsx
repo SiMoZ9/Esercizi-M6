@@ -19,7 +19,7 @@ const BlogList = props => {
   const fetchPosts = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch(`${process.env.REACT_APP_URL}/blogPosts?page=${currentPage}`)
+      const res = await fetch(`http://localhost:5050/blogPosts?page=${currentPage}`)
       const data = await res.json()
       setPosts(data)
       setIsLoading(false)
