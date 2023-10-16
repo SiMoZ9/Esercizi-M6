@@ -59,3 +59,12 @@ Content-Type: application/json
   "title": "ciao ",
   "content": "dd"
 }
+
+###
+POST http://localhost:5050/send-email
+Content-Type: application/json
+
+{
+  "subject": "Froci in zona",
+  "text": "Sta attento frate, è pieno de zozzoni"
+}

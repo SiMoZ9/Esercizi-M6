@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const authorsRoute = require('./routes/authors');
 const postsRoute = require('./routes/posts')
 const commentsRoute = require('./routes/comments')
+const emailRoute = require('./routes/email')
+
 const cors = require('cors')
 const path = require('path')
 
@@ -12,14 +14,15 @@ const PORT = 5050;
 const server = express();
 
 
+server.use(cors())
 server.use(express.json())
 
 server.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
-server.use(cors())
 server.use('/', authorsRoute)
 server.use('/', postsRoute)
 server.use('/', commentsRoute)
+server.use('/', emailRoute)
 
 mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,

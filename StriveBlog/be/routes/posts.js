@@ -5,17 +5,34 @@ const commentsModel = require("../models/commentsModel");
 const post = express.Router()
 const multer = require('multer')
 const crypto = require('crypto')
+const cloudinary = require('cloudinary').v2
+const {CloudinaryStorage} = require('multer-storage-cloudinary')
+require('dotenv').config()
 
+// configuro con i miei dati il cloud
 
+cloudinary.config({
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: process.env.CLOUDINARY_NAME
+})
+
+const cloudStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'daje_a_treni',
+        format: async (req, res) => 'png',
+        public_id: (req, file) => file.name
+    }
+})
 
 const internalStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads') //posizione di salvo i file
+    cb(null, './uploads') //posizione di salvo i file
   },
-
   // risolvere i conflitti di nomi
   filename: (req, file, cb) => {
-    const uniqueSuffix = `${Data.now()}-${crypto.randomUUID()}` //suffisso unico
+    const uniqueSuffix = `${Date.now()}-${crypto.randomUUID()}` //suffisso unico
     const extension = file.originalname.split('.').pop() //recupero estensione
     cb(null, `${file.fieldname}-${uniqueSuffix}.${extension}`) // callback con titolo completo
   }
@@ -23,6 +40,7 @@ const internalStorage = multer.diskStorage({
 })
 
 const upload = multer({storage: internalStorage})
+const cloudUpload = multer({storage: cloudStorage}) // storage del cloud
 
 // all posts
 post.get('/blogPosts', async (req, res) => {
@@ -98,36 +116,46 @@ post.get('/blogPosts/:id', async (req, res) => {
   
 })
 
-post.post('/blogPosts/upload', upload.single('img'), async (req, res) => {
+post.post('/blogPosts/upload', upload.single('cover'), async (req, res) => {
   const url = `${req.protocol}://${req.get('host')}` // si prende dinamcamente l'indirizzo
 
   try {
-    const url = req.file.filename
-    res.status(200).send({
-      statusCode: 200,
-      message: "File caricato con successo"
-    })
+    const imgUrl = req.file.filename
+    res.status(200).json({ cover: `${url}/uploads/${imgUrl}`})
   } catch(e) {
         res.status(500).send({
             statusCode: 500,
             message: "Internal server error"
         })
- 
+        console.log(e)
   }
 })
+
+post.post('/blogPosts/cloudUpload', cloudUpload.single('cover'), async (req, res) => {
+    try {
+        res.status(200).json({ cover: req.file.path})
+    } catch(e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        })
+        console.log(e)
+    }
+})
+
 
 post.post('/blogPosts', async (req, res) => {
     const newPost = new postsModel({
         category: req.body.category,
         title: req.body.title,
         cover: req.body.cover,
-        readTime: {
+  /*      readTime: {
             value: req.body.readTime.value,
             unit: req.body.readTime.unit
-        },
-        author: req.body.author,
+        }*/
+//        author: req.body.author,
         content: req.body.content,
-        comments: req.body.comments
+        //comments: req.body.comments
     })
 
     try {
