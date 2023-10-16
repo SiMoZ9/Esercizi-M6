@@ -4,12 +4,17 @@ const authorsRoute = require('./routes/authors');
 const postsRoute = require('./routes/posts')
 const commentsRoute = require('./routes/comments')
 const cors = require('cors')
+const path = require('path')
+
 
 require('dotenv').config()
 const PORT = 5050;
 const server = express();
 
+
 server.use(express.json())
+
+server.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 server.use(cors())
 server.use('/', authorsRoute)

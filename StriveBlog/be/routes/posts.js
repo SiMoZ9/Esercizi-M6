@@ -3,6 +3,26 @@ const postsModel = require('../models/postModel')
 const mongoose = require("mongoose");
 const commentsModel = require("../models/commentsModel");
 const post = express.Router()
+const multer = require('multer')
+const crypto = require('crypto')
+
+
+
+const internalStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads') //posizione di salvo i file
+  },
+
+  // risolvere i conflitti di nomi
+  filename: (req, file, cb) => {
+    const uniqueSuffix = `${Data.now()}-${crypto.randomUUID()}` //suffisso unico
+    const extension = file.originalname.split('.').pop() //recupero estensione
+    cb(null, `${file.fieldname}-${uniqueSuffix}.${extension}`) // callback con titolo completo
+  }
+
+})
+
+const upload = multer({storage: internalStorage})
 
 // all posts
 post.get('/blogPosts', async (req, res) => {
@@ -76,6 +96,24 @@ post.get('/blogPosts/:id', async (req, res) => {
             )
     }
   
+})
+
+post.post('/blogPosts/upload', upload.single('img'), async (req, res) => {
+  const url = `${req.protocol}://${req.get('host')}` // si prende dinamcamente l'indirizzo
+
+  try {
+    const url = req.file.filename
+    res.status(200).send({
+      statusCode: 200,
+      message: "File caricato con successo"
+    })
+  } catch(e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        })
+ 
+  }
 })
 
 post.post('/blogPosts', async (req, res) => {
