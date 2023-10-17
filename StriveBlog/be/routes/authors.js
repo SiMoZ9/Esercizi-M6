@@ -1,6 +1,7 @@
 const express = require('express')
 const authorModel = require('../models/authorModel')
 const postsModel = require("../models/postModel");
+const bcrypt = require('bcrypt')
 
 const authors = express.Router()
 
@@ -69,10 +70,17 @@ authors.get('/authors/:id/blogPosts', async (req, res) => {
 
 
 authors.post('/authors/create', async (req, res) => {
+    // scelgo la compessità dell'algoritmo di criptazione
+    const salt = await bcrypt.genSalt(10)
+    // creo l'hash della password
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+    // hashedPassword prende il puntatore di req.body.password e lo cripta
+
     const newAuthor = new authorModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        password: hashedPassword,
         birth: req.body.birth,
         avatar: req.body.avatar
     })

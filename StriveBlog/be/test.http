@@ -5,10 +5,11 @@ POST http://localhost:5050/authors/create
 Content-Type: application/json
 
 {
-  "firstName": "Carisi",
-  "lastName": "Peppini",
-  "email": "calslasl@gmail.com",
-  "birth": "03/12/1945",
+  "firstName": "Simone",
+  "lastName": "Panci",
+  "email": "simonejonas08@gmail.com",
+  "birth": "05/07/2001",
+  "password": "SimoneBello98@#",
   "avatar": "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
 }
 

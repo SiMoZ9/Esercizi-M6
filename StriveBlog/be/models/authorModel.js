@@ -13,6 +13,11 @@ const AuthorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    password: {
+      type: String,
+      required: true,
+      min: 8
+    },
     birth: {
         type: String,
         required: true,
