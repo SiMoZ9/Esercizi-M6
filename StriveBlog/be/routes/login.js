@@ -18,9 +18,13 @@ login.post('/login', async (req, res) => {
         })
     }
 
+    console.log(user.password)
+
     // controllo la validità della password
 
-    const validPwd = bcrypt.compare(req.body.password, user.password)
+    const validPwd = await bcrypt.compare(req.body.password, user.password)
+
+    console.log(validPwd)
 
     if (!validPwd) {
         return res.status(400).send({
@@ -30,6 +34,9 @@ login.post('/login', async (req, res) => {
     }
 
     // generazione token
+    /*
+    * Tutto ciò che voglio che mi ritorni criptato
+    * */
     const token = jwt.sign({
         firstName: user.firstName,
         lastName: user.lastName,
@@ -38,6 +45,11 @@ login.post('/login', async (req, res) => {
         expiresIn: '72h'
     })
 
+    res.header('Authorization', token).status(200).send({
+        message: "Login effettuato con successo",
+        statusCode: 200,
+        token
+    })
 })
 
 module.exports = login;

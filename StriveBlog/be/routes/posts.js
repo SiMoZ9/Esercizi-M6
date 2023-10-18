@@ -7,7 +7,9 @@ const multer = require('multer')
 const crypto = require('crypto')
 const cloudinary = require('cloudinary').v2
 const {CloudinaryStorage} = require('multer-storage-cloudinary')
+const verifyToken = require('../middlewares/verifyToken')
 require('dotenv').config()
+
 
 // configuro con i miei dati il cloud
 
@@ -43,7 +45,7 @@ const upload = multer({storage: internalStorage})
 const cloudUpload = multer({storage: cloudStorage}) // storage del cloud
 
 // all posts
-post.get('/blogPosts', async (req, res) => {
+post.get('/blogPosts', verifyToken,async (req, res) => {
 
     const {
         page = 1,

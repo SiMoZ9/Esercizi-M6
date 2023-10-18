@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const authorsRoute = require('./routes/authors');
 const postsRoute = require('./routes/posts')
 const commentsRoute = require('./routes/comments')
+const loginRoute = require('./routes/login')
 const emailRoute = require('./routes/email')
 
 const cors = require('cors')
@@ -23,6 +24,7 @@ server.use('/', authorsRoute)
 server.use('/', postsRoute)
 server.use('/', commentsRoute)
 server.use('/', emailRoute)
+server.use('/', loginRoute)
 
 mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
