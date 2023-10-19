@@ -76,6 +76,12 @@ POST http://localhost:5050/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "simonejonas08@gmail.com",
-  "password": "SimoneBello98@#"
+  "email": "ciaosimone98@gmail.com",
+  "password": "SimoneBello98"
 }
+
+
+
+###
+GET http://localhost:5050/author/me
+Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJNaWNoZWxlICIsImxhc3ROYW1lIjoiUGFuY2kiLCJlbWFpbCI6ImNpYW9zaW1vbmU5OEBnbWFpbC5jb20iLCJpYXQiOjE2OTc3MzIyNzcsImV4cCI6MTY5Nzk5MTQ3N30.OjeSZeh84S-LU2BFqa11oyZsTvr37XTzmbPU5GLo5m0

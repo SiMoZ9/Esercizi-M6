@@ -20,11 +20,10 @@ const AuthorSchema = new mongoose.Schema({
     },
     birth: {
         type: String,
-        required: true,
     },
     avatar: {
         type: String,
-        required: true,
+
     }
 }, {timestamps: true, strict: true})
 

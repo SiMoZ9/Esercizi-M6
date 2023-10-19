@@ -1,7 +1,9 @@
 const express = require('express')
 const authorModel = require('../models/authorModel')
 const postsModel = require("../models/postModel");
+const verifyToken = require('../middlewares/verifyToken')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const authors = express.Router()
 
@@ -18,6 +20,32 @@ authors.get('/authors', async (req, res) => {
             statusCode: 500,
             message: "Internal server error",
             err
+        })
+    }
+})
+
+authors.get('/author/me', verifyToken,async (req, res) => {
+    const userToken = req.headers.authorization
+    const token = userToken.split(' ')[0]
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+    try {
+        const author = await authorModel.findOne({email: payload.email})
+        if (!author) {
+            res.status(404).send({
+                message: "User not found",
+                statusCode: 404
+            })
+        } else {
+            res.status(200).send({
+                statusCode: 200,
+                author
+            })
+        }
+    } catch (err) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error",
         })
     }
 })

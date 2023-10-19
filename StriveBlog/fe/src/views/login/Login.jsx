@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import {Form, Button, Container} from 'react-bootstrap'
 import "./styles.css"
+import {useNavigate} from "react-router-dom";
+import NavLog from "./NavLog";
+import Footer from "../../components/footer/Footer";
 
 const Login = () => {
     const [loginData, setLoginData] = useState({})
     const [login, setLogin] = useState(null)
 
-    console.log(login)
+    const navigate = useNavigate()
     const handleInputChange = (e) => {
         const {name, value} = e.target
 
@@ -21,7 +24,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const postData = await fetch(`${process.env.REACT_APP_URL}login`, {
+            const postData = await fetch(`${process.env.REACT_APP_URL}/login`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -31,8 +34,10 @@ const Login = () => {
             const data = await postData.json()
             console.log(loginData)
 
-            (data.token) ? localStorage.setItem('loggedInUser', JSON.stringify(data.token)) : console.log("Token not exists")
-
+            if (data.token) {
+                localStorage.setItem('loggedInUser', JSON.stringify(data.token))
+                navigate("/home")
+            }
             setLogin(data)
         } catch (err) {
             console.log(err)
@@ -40,6 +45,8 @@ const Login = () => {
     }
 
     return (
+        <>
+        <NavLog/>
         <Container className="d-flex flex-column mt-4">
             <h1 className="text-center mb-4">Login</h1>
         <Form className="d-flex flex-column align-items-center justify-content-center" onSubmit={handleSubmit}>
@@ -57,6 +64,8 @@ const Login = () => {
             </Button>
         </Form>
         </Container>
+            <Footer/>
+        </>
     )
 }
 

@@ -4,6 +4,8 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./styles.css";
 import UploadModal from "../../components/modal/modal_upload.jsx"
+import useSession from "../../hooks/useSession";
+import MainLayout from "../../layout/MainLayout";
 
 const NewBlogPost = props => {
   const [text, setText] = useState("");
@@ -14,6 +16,10 @@ const NewBlogPost = props => {
   const [file, setFile] = useState(null)
   console.log(file)
 
+
+  const session = useSession()
+  console.log(session)
+
   const onChangeSetFile = (e) => {
     setFile(e.target.files[0])
   }
@@ -23,7 +29,7 @@ const NewBlogPost = props => {
      fileData.append('cover', cover)
 
      try {
-       const response = await fetch('http://localhost:5050/blogPosts/cloudUpload', {
+       const response = await fetch('http://localhost:5050/blogPosts/upload', {
          method: "POST",
          body: fileData
        })
@@ -70,6 +76,7 @@ const NewBlogPost = props => {
 
 
   return (
+      <MainLayout>
     <Container className="new-blog-container" onSubmit={handleSubmit}>
       <Form className="mt-5" encType="multipart/form-data">
         <Form.Group controlId="blog-form" className="mt-3">
@@ -116,6 +123,7 @@ const NewBlogPost = props => {
         </Form.Group>
       </Form>
     </Container>
+      </MainLayout>
   );
 };
 

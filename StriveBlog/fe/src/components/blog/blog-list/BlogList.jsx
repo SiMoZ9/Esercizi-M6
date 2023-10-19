@@ -7,6 +7,7 @@ import ResponsivePagination from 'react-responsive-pagination';
 import 'react-responsive-pagination/themes/classic.css';
 
 import "./pagination.css"
+import {SiTruenas} from "react-icons/si";
 
 const BlogList = props => {
   const [posts, setPosts] = useState([])
@@ -18,8 +19,14 @@ const BlogList = props => {
 
   const fetchPosts = async () => {
     setIsLoading(true)
+    const token = localStorage.getItem('loggedInUser')
     try {
-      const res = await fetch(`http://localhost:5050/blogPosts?page=${currentPage}`)
+      const res = await fetch(`http://localhost:5050/blogPosts?page=${currentPage}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': JSON.parse(token)
+        }
+      })
       const data = await res.json()
       setPosts(data)
       setIsLoading(false)
@@ -32,6 +39,7 @@ const BlogList = props => {
   useEffect(() => {
     fetchPosts()
   }, [currentPage])
+
   console.log(posts.posts)
   console.log(loading)
 

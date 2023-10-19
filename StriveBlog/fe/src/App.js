@@ -1,24 +1,28 @@
 import React from "react";
-import NavBar from "./components/navbar/BlogNavbar";
-import Footer from "./components/footer/Footer";
 import Home from "./views/home/Home";
 import Blog from "./views/blog/Blog";
 import NewBlogPost from "./views/new/New";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./views/login/Login";
-
+import Logout from "./views/Logout";
+import ProtectedRoutes from "./middlewares/ProtectedRoutes";
+import MainLayout from "./layout/MainLayout";
+import AddUser from "./views/new_user/AddUser";
 function App() {
   return (
-    <Router>
-      <NavBar />
+    <BrowserRouter>
       <Routes>
-        <Route path="/blog/:id" element={<Blog />} />
-        <Route path="/new" element={<NewBlogPost />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/login" exact element={<Login />} />
+          <Route path="/" exact element={<Login />} />
+          <Route path="/signup" element={<AddUser/>} />
+
+          <Route element={<ProtectedRoutes />} />
+              <Route path="/blog/:id" element={<Blog />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/logout" element={<Logout />} />
+          <Route path="/new" element={<NewBlogPost />} />
+          <Route/>
       </Routes>
-      <Footer />
-    </Router>
+    </BrowserRouter>
   );
 }
 
