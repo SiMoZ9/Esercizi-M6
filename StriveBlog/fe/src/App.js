@@ -15,12 +15,9 @@ function App() {
         <Route path="/blog/:id" element={<Blog />} />
         <Route path="/new" element={<NewBlogPost />} />
           <Route path="/" element={<Home />} />
+          <Route path="/login" exact element={<Login />} />
       </Routes>
       <Footer />
-        <Routes>
-            <Route path="/login" exact element={<Login />} />
-
-        </Routes>
     </Router>
   );
 }
