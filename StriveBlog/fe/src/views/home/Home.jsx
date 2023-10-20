@@ -13,7 +13,7 @@ const Home = props => {
   return (
       <MainLayout>
     <Container fluid="sm">
-      <h1 className="blog-main-title mb-3">Benvenuto sullo Strive Blog!</h1>
+      <h1 className="blog-main-title mb-3">Benvenuto sullo Strive Blog! </h1>
       <BlogList />
     </Container>
       </MainLayout>

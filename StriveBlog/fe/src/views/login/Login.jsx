@@ -1,15 +1,24 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form, Button, Container} from 'react-bootstrap'
 import "./styles.css"
 import {useNavigate} from "react-router-dom";
 import NavLog from "./NavLog";
 import Footer from "../../components/footer/Footer";
+import {isAuth} from "../../middlewares/ProtectedRoutes";
+import useSession from "../../hooks/useSession";
 
 const Login = () => {
     const [loginData, setLoginData] = useState({})
     const [login, setLogin] = useState(null)
 
     const navigate = useNavigate()
+    const session = useSession()
+
+    useEffect(() => {
+        if (session) {
+            navigate('/home')
+        }
+    }, []);
     const handleInputChange = (e) => {
         const {name, value} = e.target
 
@@ -44,6 +53,10 @@ const Login = () => {
         }
     }
 
+    const handleGithubLogin = () => {
+        window.location.href = 'http://localhost:5050/auth/github'
+    }
+
     return (
         <>
         <NavLog/>
@@ -61,6 +74,10 @@ const Login = () => {
 
             <Button style={{backgroundColor: "#00d66f", border: "0px"}} type="submit">
                 Submit
+            </Button>
+
+            <Button style={{backgroundColor: "#00d66f", border: "0px"}} className="mt-3" onClick={() => handleGithubLogin()}>
+                Signin with GitHub
             </Button>
         </Form>
         </Container>

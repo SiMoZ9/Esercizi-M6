@@ -8,6 +8,7 @@ import Logout from "./views/Logout";
 import ProtectedRoutes from "./middlewares/ProtectedRoutes";
 import MainLayout from "./layout/MainLayout";
 import AddUser from "./views/new_user/AddUser";
+import Success from "./views/success/Success";
 function App() {
   return (
     <BrowserRouter>
@@ -19,7 +20,9 @@ function App() {
               <Route path="/blog/:id" element={<Blog />} />
               <Route path="/home" element={<Home />} />
               <Route path="/logout" element={<Logout />} />
-          <Route path="/new" element={<NewBlogPost />} />
+              <Route path="/new" element={<NewBlogPost />} />
+
+              <Route path="/success/:token" element={<Success />} />
           <Route/>
       </Routes>
     </BrowserRouter>
